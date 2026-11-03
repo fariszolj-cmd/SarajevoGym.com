@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MapPanel } from '@/features/map/MapPanel';
-import { gyms, getMonthlyPrice } from '@/features/gyms/data';
+import { getMonthlyPrice } from '@/features/gyms/data';
+import { readGyms } from '@/features/gyms/repository';
 import type { Gym, SortOption } from '@/features/gyms/types';
 import { business } from '@/lib/business';
 import { calculateDistanceKm, formatPrice, getFallbackCenter } from '@/features/gyms/utils';
@@ -28,6 +29,7 @@ export function HomePage() {
   const [sortBy, setSortBy] = useState<SortOption>('distance');
   const [userLocation, setUserLocation] = useState(defaultLocation);
   const [locationNotice, setLocationNotice] = useState<string | null>(null);
+  const gyms = readGyms();
 
   useEffect(() => {
     if (!('geolocation' in navigator)) {
@@ -50,7 +52,7 @@ export function HomePage() {
     );
   }, [t]);
 
-  const filteredGyms = useMemo(() => {
+  const filteredGyms = (() => {
     const visibleGyms = gyms.filter((gym) => {
       const matchesQuery = isGymMatch(gym, query);
       const matchesRecommended = recommendedOnly ? gym.recommended : true;
@@ -79,7 +81,7 @@ export function HomePage() {
 
       return left.distanceKm - right.distanceKm;
     });
-  }, [priceLimit, query, recommendedOnly, sortBy, userLocation]);
+  })();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

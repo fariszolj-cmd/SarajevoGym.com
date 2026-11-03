@@ -1,14 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { gyms } from '@/features/gyms/data';
-import { formatPrice } from '@/features/gyms/utils';
 import { amenities } from '@/features/gyms/data';
+import { readGyms } from '@/features/gyms/repository';
+import { formatPrice } from '@/features/gyms/utils';
 
 export function GymDetailPage() {
   const { slug } = useParams();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language.startsWith('bs') ? 'bs' : 'en';
-  const gym = gyms.find((item) => item.slug === slug);
+  const gym = readGyms().find((item) => item.slug === slug);
 
   if (!gym) {
     return (

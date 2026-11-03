@@ -199,3 +199,33 @@ export function getMonthlyPrice(gym: Gym): number {
   const monthOption = gym.prices.find((price) => price.plan === 'month') ?? gym.prices[0];
   return monthOption?.amount ?? 0;
 }
+
+export const defaultGymValues: Gym = {
+  slug: '',
+  name: '',
+  address: '',
+  latitude: 43.8598,
+  longitude: 18.4313,
+  phone: '',
+  website: '',
+  instagram: '',
+  photos: [],
+  recommended: false,
+  lastVerified: new Date().toISOString().slice(0, 10),
+  description: { bs: '', en: '' },
+  editorNote: { bs: '', en: '' },
+  bestFor: [],
+  amenities: [],
+  prices: [{ plan: 'month', amount: 0, currency: 'BAM', friendlyLabel: 'Mjesečno' }],
+  openingHours: {
+    monday: '06:00 - 22:00',
+    tuesday: '06:00 - 22:00',
+    wednesday: '06:00 - 22:00',
+    thursday: '06:00 - 22:00',
+    friday: '06:00 - 21:00',
+    saturday: '09:00 - 17:00',
+    sunday: '09:00 - 15:00',
+  },
+  pros: { bs: [], en: [] },
+  cons: { bs: [], en: [] },
+};
