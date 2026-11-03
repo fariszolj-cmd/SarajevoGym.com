@@ -5,11 +5,13 @@
 - The Vite React + TypeScript foundation is installed and the long-term SarajevoGym feature structure is in place.
 - Core app pages, route structure, gym discovery flow, map integration, and i18n-driven layout have been implemented.
 - Admin gym management and persistence have been added with local data storage, validation via Zod, and list/detail integration.
+- The UI has been modernized to a more polished, editorial, dark-and-warm style with clearer hierarchy and better spacing.
 - The current build passes TypeScript and Vite production validation.
 
 ## Next step
 - Add the next layer of real product detail: authentication-ready structure, role-aware admin guards, and a more complete data/service boundary for future Supabase integration.
 - Expand from the local-first first implementation into live persistence and user-scoped functionality.
+- Build the remaining product phases: favorites, auth, legal pages, SEO/PWA, and deployment configuration.
 
 ## Decisions
 - Stack selected: Vite + React + TypeScript + React Router + TanStack Query + Tailwind + Leaflet + Zod + i18next.
@@ -17,3 +19,4 @@
 - Default locale assumptions: Bosnian / English and BAM currency for Sarajevo-focused UX.
 - Admin and public app surfaces are separated into explicit route modules to keep the structure scalable.
 - Local storage-backed repository logic is being used as the first persistence layer before the production Supabase integration.
+- Visual direction: flat, high-contrast, warm-neutral editorial design rather than generic blue gradients or template styling.

@@ -134,19 +134,19 @@ export function AdminPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <section className="mb-8 border border-stone-300 bg-white p-8">
-        <p className="text-xs uppercase tracking-[0.2em] text-stone-500">Admin</p>
-        <h1 className="mt-4 text-4xl font-semibold text-stone-900">{t('admin.title')}</h1>
-        <p className="mt-4 max-w-2xl text-stone-700">{t('admin.description')}</p>
+      <section className="mb-8 border border-[var(--line)] bg-[var(--panel)] p-8">
+        <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Admin</p>
+        <h1 className="mt-4 text-4xl font-semibold text-[var(--ink)]">{t('admin.title')}</h1>
+        <p className="mt-4 max-w-2xl text-[var(--muted)]">{t('admin.description')}</p>
       </section>
 
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.4fr]">
-        <aside className="border border-stone-300 bg-white p-6">
-          <h2 className="mb-4 text-xl font-semibold text-stone-900">Saved gyms</h2>
+        <aside className="border border-[var(--line)] bg-[var(--paper)] p-6">
+          <h2 className="mb-4 text-xl font-semibold text-[var(--ink)]">Saved gyms</h2>
           <div className="space-y-3">
             {currentGyms.map((gym) => (
-              <div key={gym.slug} className="flex items-center justify-between border border-stone-200 p-3">
-                <button type="button" onClick={() => loadGym(gym)} className="text-left text-sm font-medium text-stone-800">
+              <div key={gym.slug} className="flex items-center justify-between border border-[var(--line)] bg-[var(--panel)] p-3">
+                <button type="button" onClick={() => loadGym(gym)} className="text-left text-sm font-medium text-[var(--ink)]">
                   {gym.name}
                 </button>
                 <button type="button" onClick={() => handleDelete(gym.slug)} className="text-xs uppercase tracking-[0.12em] text-red-700">
@@ -155,129 +155,129 @@ export function AdminPage() {
               </div>
             ))}
           </div>
-          <button type="button" onClick={resetForm} className="mt-5 border border-stone-300 px-4 py-2 text-sm uppercase tracking-[0.12em] text-stone-800">
+          <button type="button" onClick={resetForm} className="mt-5 border border-[var(--line)] bg-[var(--paper)] px-4 py-2 text-sm uppercase tracking-[0.12em] text-[var(--ink)]">
             New gym
           </button>
         </aside>
 
-        <form onSubmit={handleSubmit} className="space-y-6 border border-stone-300 bg-white p-6">
+        <form onSubmit={handleSubmit} className="space-y-6 border border-[var(--line)] bg-[var(--paper)] p-6">
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Name</span>
-              <input value={form.name} onChange={(event) => updateField('name', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.name} onChange={(event) => updateField('name', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Slug</span>
-              <input value={form.slug} onChange={(event) => updateField('slug', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.slug} onChange={(event) => updateField('slug', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
-          <label className="flex flex-col gap-2 text-sm text-stone-700">
+          <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
             <span>Address</span>
-            <input value={form.address} onChange={(event) => updateField('address', event.target.value)} className="border border-stone-300 px-3 py-2" />
+            <input value={form.address} onChange={(event) => updateField('address', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
           </label>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Latitude</span>
-              <input type="number" step="0.0001" value={form.latitude} onChange={(event) => updateField('latitude', Number(event.target.value))} className="border border-stone-300 px-3 py-2" />
+              <input type="number" step="0.0001" value={form.latitude} onChange={(event) => updateField('latitude', Number(event.target.value))} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Longitude</span>
-              <input type="number" step="0.0001" value={form.longitude} onChange={(event) => updateField('longitude', Number(event.target.value))} className="border border-stone-300 px-3 py-2" />
+              <input type="number" step="0.0001" value={form.longitude} onChange={(event) => updateField('longitude', Number(event.target.value))} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Phone</span>
-              <input value={form.phone} onChange={(event) => updateField('phone', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.phone} onChange={(event) => updateField('phone', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Instagram</span>
-              <input value={form.instagram} onChange={(event) => updateField('instagram', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.instagram} onChange={(event) => updateField('instagram', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Website</span>
-              <input value={form.website} onChange={(event) => updateField('website', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.website} onChange={(event) => updateField('website', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Last verified</span>
-              <input type="date" value={form.lastVerified} onChange={(event) => updateField('lastVerified', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input type="date" value={form.lastVerified} onChange={(event) => updateField('lastVerified', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
-          <label className="flex items-center gap-3 text-sm text-stone-700">
-            <input type="checkbox" checked={form.recommended} onChange={(event) => updateField('recommended', event.target.checked)} className="h-4 w-4 accent-[#d97706]" />
+          <label className="flex items-center gap-3 text-sm text-[var(--muted)]">
+            <input type="checkbox" checked={form.recommended} onChange={(event) => updateField('recommended', event.target.checked)} className="h-4 w-4 accent-[var(--accent)]" />
             Recommended gym
           </label>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Best for tags</span>
-              <input value={form.bestForText} onChange={(event) => updateField('bestForText', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.bestForText} onChange={(event) => updateField('bestForText', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Amenities</span>
-              <input value={form.amenitiesText} onChange={(event) => updateField('amenitiesText', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.amenitiesText} onChange={(event) => updateField('amenitiesText', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Monthly price</span>
-              <input type="number" min="0" value={form.priceAmount} onChange={(event) => updateField('priceAmount', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input type="number" min="0" value={form.priceAmount} onChange={(event) => updateField('priceAmount', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Price label</span>
-              <input value={form.priceLabel} onChange={(event) => updateField('priceLabel', event.target.value)} className="border border-stone-300 px-3 py-2" />
+              <input value={form.priceLabel} onChange={(event) => updateField('priceLabel', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>BS description</span>
-              <textarea value={form.description.bs} onChange={(event) => updateField('description', { ...form.description, bs: event.target.value })} className="min-h-28 border border-stone-300 px-3 py-2" />
+              <textarea value={form.description.bs} onChange={(event) => updateField('description', { ...form.description, bs: event.target.value })} className="min-h-28 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>EN description</span>
-              <textarea value={form.description.en} onChange={(event) => updateField('description', { ...form.description, en: event.target.value })} className="min-h-28 border border-stone-300 px-3 py-2" />
+              <textarea value={form.description.en} onChange={(event) => updateField('description', { ...form.description, en: event.target.value })} className="min-h-28 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>BS editor note</span>
-              <textarea value={form.editorNote.bs} onChange={(event) => updateField('editorNote', { ...form.editorNote, bs: event.target.value })} className="min-h-24 border border-stone-300 px-3 py-2" />
+              <textarea value={form.editorNote.bs} onChange={(event) => updateField('editorNote', { ...form.editorNote, bs: event.target.value })} className="min-h-24 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>EN editor note</span>
-              <textarea value={form.editorNote.en} onChange={(event) => updateField('editorNote', { ...form.editorNote, en: event.target.value })} className="min-h-24 border border-stone-300 px-3 py-2" />
+              <textarea value={form.editorNote.en} onChange={(event) => updateField('editorNote', { ...form.editorNote, en: event.target.value })} className="min-h-24 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Pros (BS)</span>
-              <textarea value={form.prosBsText} onChange={(event) => updateField('prosBsText', event.target.value)} className="min-h-24 border border-stone-300 px-3 py-2" />
+              <textarea value={form.prosBsText} onChange={(event) => updateField('prosBsText', event.target.value)} className="min-h-24 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Pros (EN)</span>
-              <textarea value={form.prosEnText} onChange={(event) => updateField('prosEnText', event.target.value)} className="min-h-24 border border-stone-300 px-3 py-2" />
+              <textarea value={form.prosEnText} onChange={(event) => updateField('prosEnText', event.target.value)} className="min-h-24 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Cons (BS)</span>
-              <textarea value={form.consBsText} onChange={(event) => updateField('consBsText', event.target.value)} className="min-h-24 border border-stone-300 px-3 py-2" />
+              <textarea value={form.consBsText} onChange={(event) => updateField('consBsText', event.target.value)} className="min-h-24 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
-            <label className="flex flex-col gap-2 text-sm text-stone-700">
+            <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Cons (EN)</span>
-              <textarea value={form.consEnText} onChange={(event) => updateField('consEnText', event.target.value)} className="min-h-24 border border-stone-300 px-3 py-2" />
+              <textarea value={form.consEnText} onChange={(event) => updateField('consEnText', event.target.value)} className="min-h-24 border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
           </div>
 
@@ -285,10 +285,10 @@ export function AdminPage() {
           {success ? <p className="text-sm text-green-700">{success}</p> : null}
 
           <div className="flex gap-3">
-            <button type="submit" className="bg-[#171717] px-4 py-3 text-sm uppercase tracking-[0.12em] text-stone-50">
+            <button type="submit" className="bg-[var(--ink)] px-4 py-3 text-sm uppercase tracking-[0.12em] text-[var(--paper)]">
               {selectedSlug ? 'Save changes' : 'Create gym'}
             </button>
-            <button type="button" onClick={resetForm} className="border border-stone-300 px-4 py-3 text-sm uppercase tracking-[0.12em] text-stone-800">
+            <button type="button" onClick={resetForm} className="border border-[var(--line)] bg-[var(--paper)] px-4 py-3 text-sm uppercase tracking-[0.12em] text-[var(--ink)]">
               Reset
             </button>
           </div>

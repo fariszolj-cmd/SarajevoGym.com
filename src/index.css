@@ -2,8 +2,18 @@
 @import 'tailwindcss';
 
 :root {
-  color: #1f2937;
-  background-color: #f5f1ea;
+  --bg: #f3efe9;
+  --panel: #f7f2eb;
+  --paper: #fffdf9;
+  --ink: #171717;
+  --line: #d9d1c7;
+  --muted: #5f5a53;
+  --muted-light: #d7d1ca;
+  --accent: #b8621d;
+  --accent-soft: #f6e8dc;
+  --accent-deep: #7a3d0f;
+  color: var(--ink);
+  background-color: var(--bg);
   font-family: 'Segoe UI', sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -20,8 +30,8 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: #f5f1ea;
-  color: #1f2937;
+  background: var(--bg);
+  color: var(--ink);
 }
 
 * {
@@ -39,12 +49,24 @@ img {
 
 input,
 select,
+textarea,
 button {
   font: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  border-radius: 0;
 }
 
 .leaflet-container {
   height: 100%;
   width: 100%;
-  background: #e7e5e4;
+  background: #eee8e0;
+}
+
+::selection {
+  background: var(--accent-soft);
 }

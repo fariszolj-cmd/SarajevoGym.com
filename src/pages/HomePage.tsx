@@ -85,28 +85,28 @@ export function HomePage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <section className="mb-8 rounded-none border border-stone-300 bg-[#f1eadb] p-6 shadow-none">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-stone-700">
+      <section className="mb-8 border border-[var(--line)] bg-[var(--panel)] p-6 sm:p-8">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
           {business.city} · {business.country}
         </p>
-        <h1 className="text-4xl font-semibold tracking-tight text-stone-900 sm:text-5xl">
+        <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-[var(--ink)] sm:text-5xl">
           {t('app.tagline')}
         </h1>
       </section>
 
-      <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.5fr_0.5fr]">
-        <label className="flex flex-col gap-2 text-sm font-medium text-stone-700">
+      <div className="mb-6 grid gap-4 rounded-none border border-[var(--line)] bg-[var(--panel)] p-4 lg:grid-cols-[1.2fr_0.55fr_0.45fr]">
+        <label className="flex flex-col gap-2 text-sm font-medium text-[var(--muted)]">
           <span>{t('home.searchPlaceholder')}</span>
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            className="rounded-none border border-stone-300 bg-white px-3 py-3 text-base outline-none ring-0 transition focus:border-[#d97706]"
+            className="border border-[var(--line)] bg-[var(--paper)] px-3 py-3 text-base text-[var(--ink)] outline-none transition focus:border-[var(--accent)]"
             placeholder={t('home.searchPlaceholder')}
             aria-label={t('home.searchPlaceholder')}
           />
         </label>
 
-        <label className="flex flex-col gap-2 text-sm font-medium text-stone-700">
+        <label className="flex flex-col gap-2 text-sm font-medium text-[var(--muted)]">
           <span>{t('home.priceLimit')}</span>
           <input
             type="range"
@@ -117,15 +117,15 @@ export function HomePage() {
             onChange={(event) => setPriceLimit(Number(event.target.value))}
             aria-label={t('home.priceLimit')}
           />
-          <span className="text-sm text-stone-600">{formatPrice(priceLimit)}</span>
+          <span className="text-sm text-[var(--ink)]">{formatPrice(priceLimit)}</span>
         </label>
 
-        <label className="flex flex-col gap-2 text-sm font-medium text-stone-700">
+        <label className="flex flex-col gap-2 text-sm font-medium text-[var(--muted)]">
           <span>{t('home.sortBy')}</span>
           <select
             value={sortBy}
             onChange={(event) => setSortBy(event.target.value as SortOption)}
-            className="rounded-none border border-stone-300 bg-white px-3 py-3 text-base outline-none transition focus:border-[#d97706]"
+            className="border border-[var(--line)] bg-[var(--paper)] px-3 py-3 text-base text-[var(--ink)] outline-none transition focus:border-[var(--accent)]"
             aria-label={t('home.sortBy')}
           >
             <option value="distance">{t('home.distance')}</option>
@@ -135,26 +135,26 @@ export function HomePage() {
         </label>
       </div>
 
-      <div className="mb-6 flex items-center gap-3 text-sm text-stone-700">
+      <div className="mb-6 flex items-center gap-3 text-sm text-[var(--muted)]">
         <label className="inline-flex items-center gap-2">
           <input
             type="checkbox"
             checked={recommendedOnly}
             onChange={(event) => setRecommendedOnly(event.target.checked)}
-            className="h-4 w-4 border-stone-300 accent-[#d97706]"
+            className="h-4 w-4 border-[var(--line)] accent-[var(--accent)]"
           />
           {t('home.recommendedOnly')}
         </label>
       </div>
 
-      {locationNotice ? <p className="mb-6 text-sm text-stone-700">{locationNotice}</p> : null}
+      {locationNotice ? <p className="mb-6 text-sm text-[var(--muted)]">{locationNotice}</p> : null}
 
-      <div className="mb-6">
+      <div className="mb-6 overflow-hidden border border-[var(--line)] bg-[var(--paper)]">
         <MapPanel gyms={filteredGyms} />
       </div>
 
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-stone-900">
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="text-2xl font-semibold text-[var(--ink)]">
           {filteredGyms.length} {t('home.results')}
         </h2>
       </div>
@@ -163,43 +163,43 @@ export function HomePage() {
         {filteredGyms.map((gym) => (
           <article
             key={gym.slug}
-            className="overflow-hidden border border-stone-300 bg-white transition hover:border-[#d97706]"
+            className="overflow-hidden border border-[var(--line)] bg-[var(--paper)] transition hover:border-[var(--accent)]"
           >
-            <div className="flex h-40 items-center justify-center bg-stone-200 text-3xl font-semibold text-stone-700">
+            <div className="flex h-40 items-center justify-center border-b border-[var(--line)] bg-[var(--panel)] text-3xl font-semibold text-[var(--ink)]">
               {gym.name.slice(0, 2).toUpperCase()}
             </div>
             <div className="p-5">
               <div className="mb-3 flex items-center justify-between gap-3">
-                <h3 className="text-2xl font-semibold text-stone-900">{gym.name}</h3>
+                <h3 className="text-2xl font-semibold text-[var(--ink)]">{gym.name}</h3>
                 {gym.recommended ? (
-                  <span className="border border-[#d97706] bg-[#f7efe0] px-2 py-1 text-[10px] uppercase tracking-[0.15em] text-[#7c4a05]">
+                  <span className="border border-[var(--accent)] bg-[var(--accent-soft)] px-2 py-1 text-[10px] uppercase tracking-[0.15em] text-[var(--accent-deep)]">
                     Recommended
                   </span>
                 ) : null}
               </div>
 
-              <p className="mb-3 text-sm text-stone-600">{gym.address}</p>
+              <p className="mb-3 text-sm text-[var(--muted)]">{gym.address}</p>
 
-              <div className="mb-4 flex flex-wrap gap-2 text-xs uppercase tracking-[0.1em] text-stone-700">
+              <div className="mb-4 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.12em] text-[var(--ink)]">
                 {gym.amenities.slice(0, 4).map((amenity) => (
-                  <span key={amenity} className="border border-stone-300 px-2 py-1">
+                  <span key={amenity} className="border border-[var(--line)] bg-[var(--panel)] px-2 py-1">
                     {amenity}
                   </span>
                 ))}
               </div>
 
-              <div className="mb-4 flex items-center justify-between text-sm text-stone-700">
-                <span>{formatPrice(getMonthlyPrice(gym))}</span>
+              <div className="mb-4 flex items-center justify-between text-sm text-[var(--muted)]">
+                <span className="font-medium text-[var(--ink)]">{formatPrice(getMonthlyPrice(gym))}</span>
                 <span>{Math.round(gym.distanceKm)} km away</span>
               </div>
 
               <div className="flex items-center justify-between gap-4">
-                <span className="text-xs uppercase tracking-[0.15em] text-stone-500">
+                <span className="text-[10px] uppercase tracking-[0.15em] text-[var(--muted)]">
                   {t('gym.verified')}: {new Date(gym.lastVerified).toLocaleDateString('en-GB')}
                 </span>
                 <Link
                   to={`/gyms/${gym.slug}`}
-                  className="bg-[#171717] px-4 py-2 text-sm font-medium text-stone-50 transition hover:bg-[#d97706]"
+                  className="bg-[var(--ink)] px-4 py-2 text-sm font-medium text-[var(--paper)] transition hover:bg-[var(--accent)]"
                 >
                   View gym
                 </Link>
