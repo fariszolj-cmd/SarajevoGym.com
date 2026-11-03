@@ -1,0 +1,40 @@
+{
+  "app": {
+    "title": "SarajevoGym",
+    "tagline": "Find the right gym in Sarajevo"
+  },
+  "nav": {
+    "home": "Browse gyms",
+    "admin": "Admin"
+  },
+  "home": {
+    "searchPlaceholder": "Search by gym or address",
+    "allGyms": "All gyms",
+    "recommendedOnly": "Recommended only",
+    "priceLimit": "Max monthly price",
+    "sortBy": "Sort by",
+    "distance": "Distance",
+    "price": "Price",
+    "recommended": "Recommended",
+    "openNow": "Open now",
+    "results": "results"
+  },
+  "gym": {
+    "verified": "Last verified",
+    "phone": "Phone",
+    "website": "Website",
+    "instagram": "Instagram",
+    "hours": "Opening hours",
+    "plans": "Price plans",
+    "amenities": "Amenities",
+    "ourTake": "Our take",
+    "bestFor": "Best for",
+    "pros": "Pros",
+    "cons": "Cons",
+    "nearbyCenter": "Using Sarajevo city center fallback"
+  },
+  "admin": {
+    "title": "Admin workspace",
+    "description": "Manage gyms, prices, amenities and verified data for Sarajevo."
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "app": {
+    "title": "SarajevoGym",
+    "tagline": "Pronađite pravi gym u Sarajevu"
+  },
+  "nav": {
+    "home": "Pretraži centre",
+    "admin": "Admin"
+  },
+  "home": {
+    "searchPlaceholder": "Pretraži po nazivu ili adresi",
+    "allGyms": "Svi centri",
+    "recommendedOnly": "Samo preporučeni",
+    "priceLimit": "Maksimalna mjesečna cijena",
+    "sortBy": "Sortiraj po",
+    "distance": "Udaljenosti",
+    "price": "Cijeni",
+    "recommended": "Preporuci",
+    "openNow": "Otvoreno sada",
+    "results": "rezultata"
+  },
+  "gym": {
+    "verified": "Zadnja provjera",
+    "phone": "Telefon",
+    "website": "Web stranica",
+    "instagram": "Instagram",
+    "hours": "Radno vrijeme",
+    "plans": "Cjenovnici",
+    "amenities": "Usluge",
+    "ourTake": "Naš utisak",
+    "bestFor": "Najbolje za",
+    "pros": "Prednosti",
+    "cons": "Nedostaci",
+    "nearbyCenter": "Koristi se fallback centar Sarajeva"
+  },
+  "admin": {
+    "title": "Admin prostor",
+    "description": "Upravljajte centrima, cijenama, pogodnostima i provjerenim informacijama za Sarajevo."
+  }
+}
