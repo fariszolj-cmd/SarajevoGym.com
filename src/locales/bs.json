@@ -5,19 +5,90 @@
   },
   "nav": {
     "home": "Pretraži centre",
-    "admin": "Admin"
+    "saved": "Sačuvani",
+    "admin": "Admin",
+    "login": "Prijava",
+    "signOut": "Odjava",
+    "language": "Jezik",
+    "bosnian": "Bosanski",
+    "english": "Engleski",
+    "skip": "Preskoči na sadržaj"
+  },
+  "footer": {
+    "note": "Uporedite fitnes centre u Sarajevu i pronađite mjesto za svoj sljedeći trening.",
+    "legal": "Informacije",
+    "privacy": "Privatnost",
+    "terms": "Korištenje"
+  },
+  "seo": {
+    "homeTitle": "Teretane u Sarajevu | SarajevoGym",
+    "homeDescription": "Pronađite i uporedite fitnes centre u Sarajevu po lokaciji, cijeni i pogodnostima.",
+    "savedTitle": "Sačuvane teretane | SarajevoGym",
+    "savedDescription": "Pregledajte sačuvane fitnes centre u Sarajevu.",
+    "adminTitle": "Demo administracija | SarajevoGym",
+    "adminDescription": "Lokalni demo prostor za uređivanje probnih podataka o teretanama.",
+    "loginTitle": "Prijava | SarajevoGym",
+    "loginDescription": "Prijavite se na SarajevoGym koristeći Google račun.",
+    "gymTitle": "Detalji teretane | SarajevoGym",
+    "gymDescription": "Pogledajte detalje o fitnes centru u Sarajevu.",
+    "privacyTitle": "Privatnost | SarajevoGym",
+    "privacyDescription": "Saznajte kako trenutni SarajevoGym prototip koristi lokalne podatke.",
+    "termsTitle": "Korištenje prototipa | SarajevoGym",
+    "termsDescription": "Informacije i ograničenja trenutnog SarajevoGym prototipa."
+  },
+  "demo": {
+    "noticeTitle": "Lokalni prototip",
+    "notice": "Prijava i uređivanje su samo demo funkcije. Podaci ostaju u ovom pregledniku; ovo nije siguran nalog niti produkcijska administracija.",
+    "userRole": "Demo korisnik",
+    "adminRole": "Demo administrator",
+    "saved": "Dodano u sačuvane teretane.",
+    "removed": "Uklonjeno iz sačuvanih teretana."
+  },
+  "login": {
+    "title": "Prijavite se na SarajevoGym",
+    "description": "Nastavite koristeći svoj Google račun.",
+    "memberAction": "Nastavi kao korisnik",
+    "adminAction": "Nastavi kao administrator",
+    "googleAction": "Nastavite putem Googlea",
+    "googleLoading": "Povezivanje s Googleom…",
+    "googleSetup": "URL Supabase projekta je podešen, ali za Google prijavu još su potrebni anon/public ključ projekta i Google Auth podaci. Slijedite upute u docs/DATABASE.md da završite podešavanje."
   },
   "home": {
     "searchPlaceholder": "Pretraži po nazivu ili adresi",
     "allGyms": "Svi centri",
     "recommendedOnly": "Samo preporučeni",
+    "favoritesOnly": "Samo favoriti",
+    "gymsMetric": "Centri",
+    "savedMetric": "Sačuvani",
+    "topMetric": "Preporučeni",
     "priceLimit": "Maksimalna mjesečna cijena",
     "sortBy": "Sortiraj po",
     "distance": "Udaljenosti",
     "price": "Cijeni",
     "recommended": "Preporuci",
     "openNow": "Otvoreno sada",
-    "results": "rezultata"
+    "results": "rezultata",
+    "addFavorite": "Dodaj u favorite",
+    "removeFavorite": "Ukloni iz favorita",
+    "noResultsTitle": "Nema rezultata za ove filtere",
+    "noResultsText": "Pokušajte promijeniti pretragu ili ukloniti neke filtere.",
+    "clearFilters": "Očisti filtere",
+    "viewGym": "Pogledaj centar",
+    "recommendedBadge": "Preporučeno",
+    "distanceAway": "{{distance}} km udaljeno",
+    "verifiedOn": "Provjereno:",
+    "mapTitle": "Mapa lokacija",
+    "mapPins": "lokacija na mapi"
+  },
+  "saved": {
+    "eyebrow": "Sačuvana lista",
+    "title": "Vaši omiljeni centri",
+    "emptyTitle": "Još nema sačuvanih centara",
+    "emptyText": "Dodirnite srce na kartici ili stranici centra da napravite svoju listu.",
+    "explore": "Istraži centre",
+    "remove": "Ukloni",
+    "viewGym": "Pogledaj centar",
+    "verified": "Zadnja provjera:"
   },
   "gym": {
     "verified": "Zadnja provjera",
@@ -35,6 +106,36 @@
   },
   "admin": {
     "title": "Admin prostor",
-    "description": "Upravljajte centrima, cijenama, pogodnostima i provjerenim informacijama za Sarajevo."
+    "description": "Upravljajte centrima, cijenama, pogodnostima i provjerenim informacijama za Sarajevo.",
+    "localWarning": "Ovo je lokalni demo. Izmjene se čuvaju samo u ovom pregledniku."
+  },
+  "privacy": {
+    "eyebrow": "SarajevoGym · Privatnost",
+    "title": "Privatnost, jednostavno objašnjena",
+    "intro": "Ovaj prototip trenutno čuva podatke aplikacije u vašem pregledniku. Ovo opisuje trenutno ponašanje i nije zamjena za pregledanu politiku privatnosti prije javnog pokretanja.",
+    "deviceTitle": "Podaci na ovom uređaju",
+    "deviceText": "Izmjene teretana, sačuvane teretane i demo izbor prijave čuvaju se u lokalnoj memoriji ovog preglednika. Ne sinhronizuju se s drugim uređajima. Brisanje podataka stranice uklanja ih.",
+    "locationTitle": "Lokacija",
+    "locationText": "Ako dozvolite lokaciju preglednika, aplikacija koristi koordinate na stranici za sortiranje teretana. Ovaj prototip ih ne šalje u bazu aplikacije.",
+    "servicesTitle": "Vanjske usluge",
+    "servicesText": "Mapa učitava pločice s OpenStreetMap servera. Zahtjevi mogu otkriti IP adresu pružaocu mape.",
+    "accountsTitle": "Nalozi i kontakt",
+    "accountsText": "Prijava putem Google računa nije aktivna dok se ne podesi Supabase Auth. Do tada aplikacija nudi lokalne demo uloge koje ne kreiraju pravi nalog. Podaci o teretanama i favoritima ostaju u ovom pregledniku.",
+    "sensitiveText": "Za sada nemojte unositi osjetljive lične podatke u prototip.",
+    "back": "Nazad na pretragu teretana"
+  },
+  "terms": {
+    "eyebrow": "SarajevoGym · Korištenje prototipa",
+    "title": "Nekoliko važnih napomena",
+    "intro": "Ovo je rani prototip proizvoda. Ove napomene opisuju trenutna ograničenja i nisu pravno pregledani uslovi korištenja.",
+    "dataTitle": "Informacije mogu biti nepotpune",
+    "dataText": "Nazivi teretana, cijene, radno vrijeme, pogodnosti i kontakti su probni ili lokalno uneseni podaci. Prije posjete ili kupovine provjerite ih direktno s teretanom.",
+    "demoTitle": "Lokalne demo funkcije",
+    "demoText": "Uređivanje, sačuvane teretane i prijava su lokalne demonstracije. Ne omogućavaju siguran nalog, rezervnu kopiju u oblaku ni sinhronizaciju uređaja.",
+    "mapTitle": "Vanjska mapa",
+    "mapText": "Mapu pruža OpenStreetMap infrastruktura i na nju se primjenjuju pravila korištenja. Dostupnost mape može nezavisno varirati.",
+    "launchTitle": "Prije javnog pokretanja",
+    "launchText": "Prije javnog imenika potrebni su provjereni podaci, produkcijska autentifikacija i pohrana te stručni pregled uslova.",
+    "back": "Nazad na pretragu teretana"
   }
 }

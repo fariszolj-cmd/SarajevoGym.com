@@ -1,42 +1,69 @@
 import { gyms as defaultGyms } from './data';
+import { gymSchema } from './schema';
 import type { Gym } from './types';
 
 const STORAGE_KEY = 'sarajevogym-gyms';
 
-export function readGyms(): Gym[] {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return defaultGyms;
+export interface GymRepository {
+  getAll(): Promise<Gym[]>;
+  getBySlug(slug: string): Promise<Gym | null>;
+  upsert(gym: Gym): Promise<void>;
+  remove(slug: string): Promise<void>;
+}
 
-    const parsed = JSON.parse(stored) as Gym[];
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultGyms;
-  } catch {
+function readStoredGyms(): Gym[] {
+  const stored = window.localStorage.getItem(STORAGE_KEY);
+  if (stored === null) {
     return defaultGyms;
   }
-}
 
-export function writeGyms(gyms: Gym[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(gyms));
-}
-
-export function upsertGym(nextGym: Gym): Gym[] {
-  const current = readGyms();
-  const existingIndex = current.findIndex((gym) => gym.slug === nextGym.slug);
-
-  if (existingIndex >= 0) {
-    const updated = [...current];
-    updated[existingIndex] = nextGym;
-    writeGyms(updated);
-    return updated;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(stored);
+  } catch (error) {
+    throw new Error('Saved gym data is invalid. Clear this browser’s gym data to restore the starter listings.', {
+      cause: error,
+    });
   }
 
-  const updated = [nextGym, ...current];
-  writeGyms(updated);
-  return updated;
+  const validated = gymSchema.array().safeParse(parsed);
+  if (!validated.success) {
+    throw new Error('Saved gym data failed validation. Clear this browser’s gym data to restore the starter listings.', {
+      cause: validated.error,
+    });
+  }
+
+  return validated.data;
 }
 
-export function removeGym(slug: string): Gym[] {
-  const updated = readGyms().filter((gym) => gym.slug !== slug);
-  writeGyms(updated);
-  return updated;
+function writeStoredGyms(gyms: Gym[]): void {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(gyms));
 }
+
+export const localStorageGymRepository: GymRepository = {
+  async getAll() {
+    return readStoredGyms();
+  },
+
+  async getBySlug(slug) {
+    return readStoredGyms().find((gym) => gym.slug === slug) ?? null;
+  },
+
+  async upsert(nextGym) {
+    const current = readStoredGyms();
+    const existingIndex = current.findIndex((gym) => gym.slug === nextGym.slug);
+
+    if (existingIndex < 0) {
+      writeStoredGyms([nextGym, ...current]);
+      return;
+    }
+
+    const updated = [...current];
+    updated[existingIndex] = nextGym;
+    writeStoredGyms(updated);
+  },
+
+  async remove(slug) {
+    writeStoredGyms(readStoredGyms().filter((gym) => gym.slug !== slug));
+  },
+};

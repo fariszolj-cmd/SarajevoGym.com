@@ -5,19 +5,90 @@
   },
   "nav": {
     "home": "Browse gyms",
-    "admin": "Admin"
+    "saved": "Saved",
+    "admin": "Admin",
+    "login": "Sign in",
+    "signOut": "Sign out",
+    "language": "Language",
+    "bosnian": "Bosnian",
+    "english": "English",
+    "skip": "Skip to content"
+  },
+  "footer": {
+    "note": "Compare fitness centres in Sarajevo and find a place for your next workout.",
+    "legal": "Information",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "seo": {
+    "homeTitle": "Gyms in Sarajevo | SarajevoGym",
+    "homeDescription": "Find and compare fitness centres in Sarajevo by location, price, and amenities.",
+    "savedTitle": "Saved gyms | SarajevoGym",
+    "savedDescription": "Review your saved fitness centres in Sarajevo.",
+    "adminTitle": "Demo admin | SarajevoGym",
+    "adminDescription": "Local demo workspace for editing sample gym information.",
+    "loginTitle": "Sign in | SarajevoGym",
+    "loginDescription": "Sign in to SarajevoGym with your Google account.",
+    "gymTitle": "Gym details | SarajevoGym",
+    "gymDescription": "Explore details for a fitness centre in Sarajevo.",
+    "privacyTitle": "Privacy | SarajevoGym",
+    "privacyDescription": "Learn how the SarajevoGym prototype currently handles local data.",
+    "termsTitle": "Prototype use | SarajevoGym",
+    "termsDescription": "Information about the limitations of the SarajevoGym prototype."
+  },
+  "demo": {
+    "noticeTitle": "Local prototype",
+    "notice": "Sign-in and editing are demo features only. Data stays in this browser; this is not a secure account or production admin system.",
+    "userRole": "Demo user",
+    "adminRole": "Demo administrator",
+    "saved": "Gym added to saved gyms.",
+    "removed": "Gym removed from saved gyms."
+  },
+  "login": {
+    "title": "Sign in to SarajevoGym",
+    "description": "Use your Google account to continue.",
+    "memberAction": "Continue as member",
+    "adminAction": "Continue as admin",
+    "googleAction": "Continue with Google",
+    "googleLoading": "Connecting to Google…",
+    "googleSetup": "The Supabase project URL is set, but Google sign-in still needs the project's anon/public key and Google Auth provider credentials. Follow docs/DATABASE.md to finish setup."
   },
   "home": {
     "searchPlaceholder": "Search by gym or address",
     "allGyms": "All gyms",
     "recommendedOnly": "Recommended only",
+    "favoritesOnly": "Favorites only",
+    "gymsMetric": "Gyms",
+    "savedMetric": "Saved",
+    "topMetric": "Recommended",
     "priceLimit": "Max monthly price",
     "sortBy": "Sort by",
     "distance": "Distance",
     "price": "Price",
     "recommended": "Recommended",
     "openNow": "Open now",
-    "results": "results"
+    "results": "results",
+    "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove from favorites",
+    "noResultsTitle": "No gyms match these filters",
+    "noResultsText": "Try changing your search or clearing a few filters.",
+    "clearFilters": "Clear filters",
+    "viewGym": "View gym",
+    "recommendedBadge": "Recommended",
+    "distanceAway": "{{distance}} km away",
+    "verifiedOn": "Verified:",
+    "mapTitle": "Gym locations",
+    "mapPins": "locations on map"
+  },
+  "saved": {
+    "eyebrow": "Saved shortlist",
+    "title": "Your favorite gyms",
+    "emptyTitle": "No gyms saved yet",
+    "emptyText": "Tap the heart on a gym card or detail page to build your shortlist.",
+    "explore": "Explore gyms",
+    "remove": "Remove",
+    "viewGym": "View gym",
+    "verified": "Last verified:"
   },
   "gym": {
     "verified": "Last verified",
@@ -35,6 +106,36 @@
   },
   "admin": {
     "title": "Admin workspace",
-    "description": "Manage gyms, prices, amenities and verified data for Sarajevo."
+    "description": "Manage gyms, prices, amenities and verified data for Sarajevo.",
+    "localWarning": "This is a local demo. Changes are saved only in this browser."
+  },
+  "privacy": {
+    "eyebrow": "SarajevoGym · Privacy",
+    "title": "Privacy, in plain language",
+    "intro": "This prototype currently keeps app data in your browser. This describes current behavior and is not a substitute for a reviewed privacy policy before public launch.",
+    "deviceTitle": "Data stored on this device",
+    "deviceText": "Gym changes, saved gyms, and the demo sign-in selection are stored in this browser's local storage. They are not synced to other devices. Clearing browser site data removes them.",
+    "locationTitle": "Location",
+    "locationText": "If you grant browser location permission, the app uses your coordinates on the page to sort nearby gyms. This prototype does not send them to an app database.",
+    "servicesTitle": "External services",
+    "servicesText": "The map loads tiles from OpenStreetMap servers. Those requests may reveal your IP address to the map provider.",
+    "accountsTitle": "Accounts and contact",
+    "accountsText": "Google account sign-in is inactive until Supabase Auth is configured. Until then, the app offers local demo roles that do not create real accounts. Gym and favorite data remains in this browser.",
+    "sensitiveText": "For now, do not enter sensitive personal information in the prototype.",
+    "back": "Back to gym search"
+  },
+  "terms": {
+    "eyebrow": "SarajevoGym · Prototype use",
+    "title": "A few things to know",
+    "intro": "This is an early product prototype. These notes describe current limitations and are not reviewed legal terms.",
+    "dataTitle": "Information may be incomplete",
+    "dataText": "Gym names, prices, hours, amenities, and contact details are sample or locally entered content at this stage. Confirm all details directly with a gym before travelling or making a purchase.",
+    "demoTitle": "Local demo features",
+    "demoText": "Admin editing, saved gyms, and sign-in are local demonstrations. They do not provide a secure account, cloud backup, or cross-device synchronization.",
+    "mapTitle": "External map service",
+    "mapText": "Map tiles are served by OpenStreetMap tile infrastructure and are subject to its usage policy. The map may be unavailable or rate-limited independently of SarajevoGym.",
+    "launchTitle": "Before public launch",
+    "launchText": "The service needs verified listings, production authentication and storage, and professionally reviewed terms before it should be relied on as a public directory.",
+    "back": "Back to gym search"
   }
 }

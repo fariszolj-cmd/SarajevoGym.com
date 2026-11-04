@@ -7,13 +7,26 @@
 - Admin gym management and persistence have been added with local data storage, validation via Zod, and list/detail integration.
 - The UI has been modernized to a more polished, editorial, dark-and-warm style with clearer hierarchy and better spacing.
 - Authentication-ready architecture has been added with an auth context, login flow, and admin-only route guard for future Supabase integration.
-- The current build passes TypeScript and Vite production validation.
+- Favorites now have a saved-list page, and the home page has responsive quick filters and a 10-BAM price selector capped at 150 BAM.
+- A Supabase Postgres/PostGIS initial schema and row-level security policies have been prepared, with environment configuration and setup guidance.
+- Gym and favorites UI now use asynchronous repository contracts and TanStack Query, with validated localStorage adapters selected centrally in `src/features/gyms/repositories.ts`.
+- The owner reports that Google sign-in now works and the owner account has the admin role. Supabase project configuration is local in ignored `.env.local`.
+- Gym and favorites are still stored in browser localStorage; admin gym changes do not yet test Supabase RLS until the Supabase repository adapters are wired.
+- Privacy and prototype-use pages, translated route metadata, a branded favicon, and install metadata are in place. These pages describe the current demo and are not legal advice.
+- CI is configured to run lint, tests, and a production build. Repository tests cover the local gym and favorites adapters.
+- The discovery page now pairs a sticky map with a single-column results panel on wide screens, stacks them on mobile, and uses locally generated abstract card artwork without adding gym facts or image services.
+- Keyboard, focus, form, contrast, and live-status improvements have been applied across the main flows. A 320px browser check confirmed no horizontal overflow.
+- Google OAuth sign-in is wired through Supabase Auth, with profile-backed roles, safe user-role defaults for new accounts, and bilingual setup/error messaging. The owner has confirmed successful Google sign-in and admin access.
+- The current lint, test, and TypeScript/Vite production build checks pass.
 
 ## Next step
-- Hook the auth layer to a real Supabase project and user table so the app stops relying on demo-session state.
-- Add role-aware admin actions, favorites, and user-scoped submissions tied to authenticated accounts.
-- Expand the data layer with server-side validation and production persistence before deployment.
-- Build the remaining product phases: legal pages, SEO/PWA, and deployment configuration.
+- Replace the localStorage gym and favorites adapters with Supabase-backed repositories while preserving the local adapters for unconfigured development.
+- Exercise gym CRUD and favorites using the real admin account, then verify anonymous/user/admin behavior against RLS. Use and remove a clearly labeled temporary test gym rather than adding unverified listings.
+- Do not seed or publish real gym facts; the owner will enter verified listings manually.
+- Choose a hosting provider and complete its deployment configuration; the current app has not been deployed.
+- Choose a hosting provider and complete its deployment configuration; the current app has not been deployed.
+- Review the demo legal disclosures with appropriate counsel before treating them as production policies.
+- Continue final form, error-state, and mobile interaction checks without introducing paid services or external gym-image dependencies.
 
 ## Decisions
 - Stack selected: Vite + React + TypeScript + React Router + TanStack Query + Tailwind + Leaflet + Zod + i18next.
@@ -22,4 +35,6 @@
 - Admin and public app surfaces are separated into explicit route modules to keep the structure scalable.
 - Local storage-backed repository logic is being used as the first persistence layer before the production Supabase integration.
 - Auth is intentionally implemented behind a small role-based abstraction so the app can evolve cleanly toward Supabase or a custom backend without rewriting UI flows.
+- Supabase schema setup is versioned in `supabase/migrations/`; the browser app must use only the anon/public key and rely on RLS.
 - Visual direction: flat, high-contrast, warm-neutral editorial design rather than generic blue gradients or template styling.
+- Data integrity constraint: only publish verified gym information. Any temporary permission-test listing must be clearly labeled and removed after testing.

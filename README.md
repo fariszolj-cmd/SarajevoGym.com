@@ -1,32 +1,41 @@
-# React + TypeScript + Vite
+# SarajevoGym
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+SarajevoGym is a bilingual gym discovery app for Sarajevo, Bosnia and Herzegovina. It currently provides gym listings, filters, a map, gym details, favorites, and a local demo admin experience.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Requirements: Node.js 22 or later and npm.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```powershell
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Open the local URL printed by Vite. To validate a production build and lint:
+
+```powershell
+npm run build
+npm run lint
+```
+
+## Database status
+
+The Supabase project and Google sign-in are configured by the owner, who reports successful login and admin access. Gym listings and favorites still use browser `localStorage` and are not yet shared with Supabase. The schema and RLS migration are in `supabase/migrations/`; setup and integration status are in [docs/DATABASE.md](./docs/DATABASE.md).
+
+Google account sign-in uses Supabase Auth. Setting `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` enables authentication, but does not migrate browser data or make gym and favorite operations use the database yet.
+
+The UI reads gyms and favorites through asynchronous repository interfaces in `src/features/gyms/`. The selected localStorage adapters are wired in one place, `src/features/gyms/repositories.ts`. A future database adapter can implement those same contracts and be selected there; pages and query hooks do not access browser storage directly.
+
+Never put a Supabase service-role key in the browser or a `VITE_` environment variable.
+
+## Project structure
+
+- `src/pages/` — public, gym detail, saved, and admin pages
+- `src/features/gyms/` — gym model, repository contracts, browser-storage adapter, and query hooks
+- `src/features/auth/` — Google OAuth integration, local demo identity, profile roles, and route guard
+- `src/features/map/` — Leaflet map components
+- `src/lib/` — app configuration and lazily initialized Supabase client
+- `supabase/migrations/` — versioned database schema and security policies
+- `docs/` — database setup, project status, and free-tier limits
+
+See [docs/LIMITS.md](./docs/LIMITS.md) for current provider and free-tier considerations.

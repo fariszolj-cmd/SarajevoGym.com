@@ -1,10 +1,19 @@
-import { createClient } from '@supabase/supabase-js';
-import { appEnv } from './env';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { getSupabaseConfig } from './env';
 
-export const supabase = createClient(appEnv.supabaseUrl, appEnv.supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
-  },
-});
+let client: SupabaseClient | undefined;
+
+export function getSupabaseClient(): SupabaseClient {
+  if (!client) {
+    const config = getSupabaseConfig();
+    client = createClient(config.url, config.anonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    });
+  }
+
+  return client;
+}

@@ -1,14 +1,36 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { amenities } from '@/features/gyms/data';
-import { readGyms } from '@/features/gyms/repository';
+import {
+  useFavoriteSlugsQuery,
+  useGymQuery,
+  useToggleFavoriteMutation,
+} from '@/features/gyms/queries';
 import { formatPrice } from '@/features/gyms/utils';
 
 export function GymDetailPage() {
   const { slug } = useParams();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language.startsWith('bs') ? 'bs' : 'en';
-  const gym = readGyms().find((item) => item.slug === slug);
+  const gymQuery = useGymQuery(slug);
+  const favoriteSlugsQuery = useFavoriteSlugsQuery();
+  const toggleFavoriteMutation = useToggleFavoriteMutation();
+  const [announcement, setAnnouncement] = useState('');
+  const gym = gymQuery.data;
+  const favoriteSlugs = favoriteSlugsQuery.data ?? [];
+
+  if (gymQuery.isPending || favoriteSlugsQuery.isPending) {
+    return <p role="status" className="mx-auto max-w-4xl px-4 py-16 text-center text-[var(--muted)]">Loading gym details…</p>;
+  }
+
+  if (gymQuery.isError || favoriteSlugsQuery.isError) {
+    return (
+      <p role="alert" className="mx-auto max-w-4xl px-4 py-16 text-center text-red-900">
+        Could not load this gym. {gymQuery.error?.message ?? favoriteSlugsQuery.error?.message}
+      </p>
+    );
+  }
 
   if (!gym) {
     return (
@@ -25,12 +47,21 @@ export function GymDetailPage() {
   const note = gym.editorNote[currentLanguage as 'bs' | 'en'];
   const pros = gym.pros[currentLanguage as 'bs' | 'en'];
   const cons = gym.cons[currentLanguage as 'bs' | 'en'];
+  const isSaved = favoriteSlugs.includes(gym.slug);
+
+  const handleToggleFavorite = () => {
+    toggleFavoriteMutation.mutate(gym.slug, {
+      onSuccess: () => setAnnouncement(t(isSaved ? 'demo.removed' : 'demo.saved')),
+    });
+  };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-8 overflow-hidden border border-stone-300 bg-white">
-        <div className="flex h-72 items-center justify-center bg-stone-200 text-4xl font-semibold text-stone-700">
-          {gym.name.slice(0, 2).toUpperCase()}
+    <div className="detail-page page-shell mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
+      <div className="hero-panel mb-8 overflow-hidden rounded-[28px]">
+        <div className="relative flex h-72 items-center justify-center bg-[linear-gradient(135deg,#f5eee5,#f0e5dc)] text-4xl font-semibold text-stone-700">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(184,98,29,0.12),transparent_35%)]" />
+          <span className="relative">{gym.name.slice(0, 2).toUpperCase()}</span>
         </div>
         <div className="p-6">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
@@ -38,14 +69,31 @@ export function GymDetailPage() {
               <h1 className="text-4xl font-semibold text-stone-900">{gym.name}</h1>
               <p className="mt-2 text-stone-600">{gym.address}</p>
             </div>
-            {gym.recommended ? (
-              <span className="border border-[#d97706] bg-[#f7efe0] px-3 py-2 text-[10px] uppercase tracking-[0.15em] text-[#7c4a05]">
-                Recommended
-              </span>
-            ) : null}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleToggleFavorite}
+                disabled={toggleFavoriteMutation.isPending}
+                aria-pressed={isSaved}
+                className="soft-button border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-800 transition hover:border-[#7c4a05]"
+                aria-label={isSaved ? t('home.removeFavorite') : t('home.addFavorite')}
+              >
+                {isSaved ? '♥ Saved' : '♡ Save'}
+              </button>
+              {gym.recommended ? (
+                <span className="border border-[#d97706] bg-[#f7efe0] px-3 py-2 text-[10px] uppercase tracking-[0.15em] text-[#7c4a05]">
+                  Recommended
+                </span>
+              ) : null}
+            </div>
           </div>
 
           <p className="max-w-3xl text-base leading-7 text-stone-700">{dynamicDescription}</p>
+          {toggleFavoriteMutation.isError ? (
+            <p role="alert" className="mt-4 text-sm text-red-800">
+              Could not update your saved gyms. {toggleFavoriteMutation.error.message}
+            </p>
+          ) : null}
         </div>
       </div>
 

@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { defaultGymValues } from '@/features/gyms/data';
-import { readGyms, removeGym, upsertGym } from '@/features/gyms/repository';
+import {
+  useGymsQuery,
+  useRemoveGymMutation,
+  useSaveGymMutation,
+} from '@/features/gyms/queries';
 import { gymSchema } from '@/features/gyms/schema';
 import type { Gym } from '@/features/gyms/types';
 
@@ -38,7 +42,18 @@ export function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
-  const currentGyms = readGyms();
+  const gymListHeadingRef = useRef<HTMLHeadingElement>(null);
+  const errorSummaryRef = useRef<HTMLParagraphElement>(null);
+  const gymsQuery = useGymsQuery();
+  const saveGymMutation = useSaveGymMutation();
+  const removeGymMutation = useRemoveGymMutation();
+  const currentGyms = gymsQuery.data ?? [];
+
+  useEffect(() => {
+    if (error) {
+      errorSummaryRef.current?.focus();
+    }
+  }, [error]);
 
   const updateField = (field: string, value: unknown) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -66,7 +81,7 @@ export function AdminPage() {
     setForm(emptyForm);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
     setSuccess(null);
@@ -114,39 +129,61 @@ export function AdminPage() {
 
     const parsed = gymSchema.safeParse(nextGym);
     if (!parsed.success) {
-      const message = parsed.error.issues[0]?.message ?? 'The gym details are invalid.';
+      const issue = parsed.error.issues[0];
+      const field = issue?.path.length ? `${issue.path.join('.')}: ` : '';
+      const message = `${field}${issue?.message ?? 'The gym details are invalid.'}`;
       setError(message);
       return;
     }
 
-    upsertGym(parsed.data);
-    setSuccess('Gym saved successfully.');
-    resetForm();
+    try {
+      await saveGymMutation.mutateAsync(parsed.data);
+      setSuccess('Gym saved successfully.');
+      resetForm();
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'Could not save this gym.');
+    }
   };
 
-  const handleDelete = (slug: string) => {
-    removeGym(slug);
-    if (selectedSlug === slug) {
-      resetForm();
+  const handleDelete = async (slug: string) => {
+    setError(null);
+    setSuccess(null);
+    try {
+      await removeGymMutation.mutateAsync(slug);
+      if (selectedSlug === slug) {
+        resetForm();
+      }
+      setSuccess('Gym removed.');
+      gymListHeadingRef.current?.focus();
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : 'Could not remove this gym.');
     }
-    setSuccess('Gym removed.');
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="admin-workspace page-shell mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <section className="mb-8 border border-[var(--line)] bg-[var(--panel)] p-8">
         <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">Admin</p>
         <h1 className="mt-4 text-4xl font-semibold text-[var(--ink)]">{t('admin.title')}</h1>
         <p className="mt-4 max-w-2xl text-[var(--muted)]">{t('admin.description')}</p>
+        <p className="mt-5 max-w-2xl rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-4 text-sm text-[var(--muted)]">
+          {t('admin.localWarning')}
+        </p>
       </section>
 
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.4fr]">
         <aside className="border border-[var(--line)] bg-[var(--paper)] p-6">
-          <h2 className="mb-4 text-xl font-semibold text-[var(--ink)]">Saved gyms</h2>
+          <h2 ref={gymListHeadingRef} tabIndex={-1} className="mb-4 text-xl font-semibold text-[var(--ink)]">Saved gyms</h2>
+          {gymsQuery.isError ? (
+            <p role="alert" className="mb-4 text-sm text-red-800">
+              Could not load gyms. {gymsQuery.error.message}
+            </p>
+          ) : null}
+          {gymsQuery.isPending ? <p role="status" className="mb-4 text-sm text-[var(--muted)]">Loading gyms…</p> : null}
           <div className="space-y-3">
             {currentGyms.map((gym) => (
               <div key={gym.slug} className="flex items-center justify-between border border-[var(--line)] bg-[var(--panel)] p-3">
-                <button type="button" onClick={() => loadGym(gym)} className="text-left text-sm font-medium text-[var(--ink)]">
+                <button type="button" onClick={() => loadGym(gym)} aria-pressed={selectedSlug === gym.slug} className="text-left text-sm font-medium text-[var(--ink)]">
                   {gym.name}
                 </button>
                 <button type="button" onClick={() => handleDelete(gym.slug)} className="text-xs uppercase tracking-[0.12em] text-red-700">
@@ -161,10 +198,16 @@ export function AdminPage() {
         </aside>
 
         <form onSubmit={handleSubmit} className="space-y-6 border border-[var(--line)] bg-[var(--paper)] p-6">
+          <p ref={errorSummaryRef} tabIndex={-1} role="alert" aria-live="assertive" className={error ? 'text-sm text-red-800' : 'sr-only'}>
+            {error ?? ''}
+          </p>
+          <p role="status" aria-live="polite" aria-atomic="true" className={success || saveGymMutation.isPending || removeGymMutation.isPending ? 'text-sm text-green-800' : 'sr-only'}>
+            {saveGymMutation.isPending ? 'Saving gym…' : removeGymMutation.isPending ? 'Removing gym…' : success ?? ''}
+          </p>
           <div className="grid gap-4 md:grid-cols-2">
             <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Name</span>
-              <input value={form.name} onChange={(event) => updateField('name', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
+              <input required value={form.name} onChange={(event) => updateField('name', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
             <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Slug</span>
@@ -174,7 +217,7 @@ export function AdminPage() {
 
           <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
             <span>Address</span>
-            <input value={form.address} onChange={(event) => updateField('address', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
+            <input required value={form.address} onChange={(event) => updateField('address', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
           </label>
 
           <div className="grid gap-4 md:grid-cols-2">
@@ -191,7 +234,7 @@ export function AdminPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Phone</span>
-              <input value={form.phone} onChange={(event) => updateField('phone', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
+              <input required value={form.phone} onChange={(event) => updateField('phone', event.target.value)} className="border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-[var(--ink)]" />
             </label>
             <label className="flex flex-col gap-2 text-sm text-[var(--muted)]">
               <span>Instagram</span>
