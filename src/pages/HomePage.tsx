@@ -33,11 +33,13 @@ export function HomePage() {
   const [recommendedOnly, setRecommendedOnly] = useState(false);
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [priceLimit, setPriceLimit] = useState(150);
-  const [sortBy, setSortBy] = useState<SortOption>('distance');
-  const [userLocation, setUserLocation] = useState(defaultLocation);
-  const [locationNotice, setLocationNotice] = useState<string | null>(() =>
-    typeof navigator !== 'undefined' && !('geolocation' in navigator) ? t('gym.nearbyCenter') : null,
+  const [hasLocation, setHasLocation] = useState<boolean | null>(() =>
+    typeof navigator !== 'undefined' && 'geolocation' in navigator ? null : false,
   );
+  const [sortBy, setSortBy] = useState<SortOption>(() => (
+    typeof navigator !== 'undefined' && 'geolocation' in navigator ? 'distance' : 'recommended'
+  ));
+  const [userLocation, setUserLocation] = useState(defaultLocation);
   const [announcement, setAnnouncement] = useState('');
   const gymsQuery = useGymsQuery();
   const favoriteSlugsQuery = useFavoriteSlugsQuery();
@@ -57,18 +59,21 @@ export function HomePage() {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        setHasLocation(true);
         setUserLocation({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
       },
       () => {
+        setHasLocation(false);
         setUserLocation(defaultLocation);
-        setLocationNotice(t('gym.nearbyCenter'));
       },
       { enableHighAccuracy: true, timeout: 8000 },
     );
   }, [t]);
+
+  const activeSortBy = hasLocation === false && sortBy === 'distance' ? 'recommended' : sortBy;
 
   const filteredGyms = useMemo(() => {
     const visibleGyms = gyms.filter((gym) => {
@@ -83,24 +88,30 @@ export function HomePage() {
 
     const withDistance = visibleGyms.map((gym) => ({
       ...gym,
-      distanceKm: calculateDistanceKm(userLocation, {
-        latitude: gym.latitude,
-        longitude: gym.longitude,
-      }),
+      distanceKm: hasLocation === true
+        ? calculateDistanceKm(userLocation, {
+            latitude: gym.latitude,
+            longitude: gym.longitude,
+          })
+        : null,
     }));
 
     return withDistance.sort((left, right) => {
-      if (sortBy === 'price') {
+      if (activeSortBy === 'price') {
         return getMonthlyPrice(left) - getMonthlyPrice(right);
       }
 
-      if (sortBy === 'recommended') {
+      if (activeSortBy === 'recommended') {
         return Number(right.recommended) - Number(left.recommended);
+      }
+
+      if (left.distanceKm === null || right.distanceKm === null) {
+        return 0;
       }
 
       return left.distanceKm - right.distanceKm;
     });
-  }, [favoritesOnly, favoriteSlugs, gyms, priceLimit, query, recommendedOnly, sortBy, userLocation]);
+  }, [activeSortBy, favoritesOnly, favoriteSlugs, gyms, hasLocation, priceLimit, query, recommendedOnly, userLocation]);
 
   const handleToggleFavorite = (slug: string) => {
     const removing = favoriteSlugs.includes(slug);
@@ -112,6 +123,9 @@ export function HomePage() {
   return (
     <div className="page-shell mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {hasLocation === false ? t('home.locationUnavailable') : ''}
+      </p>
       <section className="hero-panel mb-8 rounded-[28px] p-6 sm:p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
@@ -171,12 +185,14 @@ export function HomePage() {
         <label className="flex flex-col gap-2 text-sm font-medium text-[var(--muted)]">
           <span>{t('home.sortBy')}</span>
           <select
-            value={sortBy}
+            value={activeSortBy}
             onChange={(event) => setSortBy(event.target.value as SortOption)}
             className="border border-[var(--line)] bg-[var(--paper)] px-3 py-3 text-base text-[var(--ink)] outline-none transition focus:border-[var(--accent)]"
             aria-label={t('home.sortBy')}
           >
-            <option value="distance">{t('home.distance')}</option>
+            <option value="distance" disabled={hasLocation !== true}>
+              {hasLocation === true ? t('home.distance') : t('home.distanceUnavailable')}
+            </option>
             <option value="price">{t('home.price')}</option>
             <option value="recommended">{t('home.recommended')}</option>
           </select>
@@ -205,7 +221,11 @@ export function HomePage() {
         ))}
       </div>
 
-      {locationNotice ? <p className="mb-6 text-sm text-[var(--muted)]">{locationNotice}</p> : null}
+      {hasLocation === false ? (
+        <p className="mb-6 text-sm text-[var(--muted)]">
+          {t('home.locationUnavailable')}
+        </p>
+      ) : null}
       {gymsQuery.isPending ? (
         <p role="status" className="mb-6 text-sm text-[var(--muted)]">Loading gym listings…</p>
       ) : null}
@@ -298,7 +318,9 @@ export function HomePage() {
 
               <div className="mb-4 flex items-center justify-between text-sm text-[var(--muted)]">
                 <span className="font-medium text-[var(--ink)]">{formatPrice(getMonthlyPrice(gym))}</span>
-                <span>{t('home.distanceAway', { distance: Math.round(gym.distanceKm) })}</span>
+                {gym.distanceKm !== null ? (
+                  <span>{t('home.distanceAway', { distance: Math.round(gym.distanceKm) })}</span>
+                ) : null}
               </div>
 
               <div className="flex items-center justify-between gap-4">

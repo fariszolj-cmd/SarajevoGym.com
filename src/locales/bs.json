@@ -64,6 +64,8 @@
     "priceLimit": "Maksimalna mjesečna cijena",
     "sortBy": "Sortiraj po",
     "distance": "Udaljenosti",
+    "distanceUnavailable": "Udaljenost (dozvolite lokaciju za aktivaciju)",
+    "locationUnavailable": "Lokacija nije podijeljena, zato su prikazane sve teretane bez sortiranja i prikaza udaljenosti.",
     "price": "Cijeni",
     "recommended": "Preporuci",
     "openNow": "Otvoreno sada",
@@ -107,7 +109,15 @@
   "admin": {
     "title": "Admin prostor",
     "description": "Upravljajte centrima, cijenama, pogodnostima i provjerenim informacijama za Sarajevo.",
-    "localWarning": "Ovo je lokalni demo. Izmjene se čuvaju samo u ovom pregledniku."
+    "localWarning": "Ovo je lokalni demo. Izmjene se čuvaju samo u ovom pregledniku.",
+    "databaseWarning": "Izmjene se čuvaju u podešenom Supabase projektu.",
+    "accessTitle": "Administratorski pristup",
+    "accessDescription": "Dodijelite administratorsku ulogu postojećem nalogu putem e-mail adrese. Osoba se prvo mora prijaviti putem Googlea, a nakon dodjele odjaviti i ponovo prijaviti.",
+    "emailLabel": "E-mail naloga",
+    "promoteAction": "Dodijeli administratorsku ulogu",
+    "promoting": "Ažuriranje administratorskog pristupa…",
+    "promoteSuccess": "Administratorski pristup je dodijeljen.",
+    "promoteError": "Nije moguće ažurirati administratorski pristup."
   },
   "privacy": {
     "eyebrow": "SarajevoGym · Privatnost",

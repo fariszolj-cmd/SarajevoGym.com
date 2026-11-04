@@ -13,17 +13,21 @@
 - The owner reports that Google sign-in now works and the owner account has the admin role. Supabase project configuration is local in ignored `.env.local`.
 - Gym and favorites now select Supabase-backed repositories when project configuration is present; localStorage remains the fallback when it is absent.
 - Admin gym saves use a security-invoker database function in `20261104010000_atomic_gym_upsert.sql` so the gym and its related price/amenity/photo data update atomically under existing RLS rules.
+- Admins can promote an already registered Google account by email through an admin-only UI and a `SECURITY DEFINER` RPC that verifies the caller's admin role before updating the profile. Apply `20261104020000_admin_user_management.sql` to enable it.
+- The admin-promotion migration has not been applied to the hosted Supabase project; use the SQL Editor before testing this UI.
 - Anonymous browser verification confirms public gym reads succeed, the Admin navigation link is hidden, and direct `/admin` access is denied. Anonymous Supabase profile reads return no rows, and an anonymous gym insert is denied with HTTP 401 / PostgreSQL code `42501`.
 - The new atomic-save RPC is not yet present in the hosted project (anonymous probe returned `PGRST202`), so no authenticated gym-write test was attempted. The owner must apply the new migration before admin form writes can succeed.
 - Privacy and prototype-use pages, translated route metadata, a branded favicon, and install metadata are in place. These pages describe the current demo and are not legal advice.
 - CI is configured to run lint, tests, and a production build. Repository tests cover the local gym and favorites adapters.
 - The discovery page now pairs a sticky map with a single-column results panel on wide screens, stacks them on mobile, and uses locally generated abstract card artwork without adding gym facts or image services.
 - Keyboard, focus, form, contrast, and live-status improvements have been applied across the main flows. A 320px browser check confirmed no horizontal overflow.
+- If a visitor denies or cannot provide location, gym discovery continues to show all matching listings; distance sorting is disabled, the sort falls back to recommendations, distance labels are hidden, and an accessible localized status explains the limitation. Browser checks verified this with mocked listings and verified distance sorting/labels still work when location is available.
 - Google OAuth sign-in is wired through Supabase Auth, with profile-backed roles, safe user-role defaults for new accounts, and bilingual setup/error messaging. The owner has confirmed successful Google sign-in and admin access.
-- The current lint, test, and TypeScript/Vite production build checks pass.
+- The current lint, all 7 tests, and TypeScript/Vite production build checks pass.
 
 ## Next step
 - Apply the new atomic-save migration in Supabase after the initial schema migration, then exercise gym CRUD and favorites with the real admin account.
+- Apply `20261104020000_admin_user_management.sql` before using the website's admin promotion form.
 - Verify normal-user behavior against RLS as well as admin behavior. Use and remove a clearly labeled temporary test gym rather than adding unverified listings.
 - Do not seed or publish real gym facts; the owner will enter verified listings manually.
 - Choose a hosting provider and complete its deployment configuration; the current app has not been deployed.

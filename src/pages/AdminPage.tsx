@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { promoteUserToAdmin } from '@/features/admin/service';
 import { defaultGymValues } from '@/features/gyms/data';
 import {
   useGymsQuery,
@@ -8,6 +9,7 @@ import {
 } from '@/features/gyms/queries';
 import { gymSchema } from '@/features/gyms/schema';
 import type { Gym } from '@/features/gyms/types';
+import { isSupabaseConfigured } from '@/lib/env';
 
 const emptyForm = {
   ...defaultGymValues,
@@ -41,6 +43,10 @@ export function AdminPage() {
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminError, setAdminError] = useState<string | null>(null);
+  const [adminSuccess, setAdminSuccess] = useState<string | null>(null);
+  const [isPromotingAdmin, setIsPromotingAdmin] = useState(false);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const gymListHeadingRef = useRef<HTMLHeadingElement>(null);
   const errorSummaryRef = useRef<HTMLParagraphElement>(null);
@@ -160,6 +166,27 @@ export function AdminPage() {
     }
   };
 
+  const handlePromoteAdmin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isPromotingAdmin) {
+      return;
+    }
+
+    setAdminError(null);
+    setAdminSuccess(null);
+    setIsPromotingAdmin(true);
+
+    try {
+      await promoteUserToAdmin(adminEmail);
+      setAdminEmail('');
+      setAdminSuccess(t('admin.promoteSuccess'));
+    } catch (promotionError) {
+      setAdminError(promotionError instanceof Error ? promotionError.message : t('admin.promoteError'));
+    } finally {
+      setIsPromotingAdmin(false);
+    }
+  };
+
   return (
     <div className="admin-workspace page-shell mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <section className="mb-8 border border-[var(--line)] bg-[var(--panel)] p-8">
@@ -167,9 +194,43 @@ export function AdminPage() {
         <h1 className="mt-4 text-4xl font-semibold text-[var(--ink)]">{t('admin.title')}</h1>
         <p className="mt-4 max-w-2xl text-[var(--muted)]">{t('admin.description')}</p>
         <p className="mt-5 max-w-2xl rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-4 text-sm text-[var(--muted)]">
-          {t('admin.localWarning')}
+          {isSupabaseConfigured ? t('admin.databaseWarning') : t('admin.localWarning')}
         </p>
       </section>
+
+      {isSupabaseConfigured ? (
+        <section aria-labelledby="admin-access-title" className="content-card mb-8">
+          <h2 id="admin-access-title">{t('admin.accessTitle')}</h2>
+          <p className="mb-5 text-sm text-[var(--muted)]">{t('admin.accessDescription')}</p>
+          <form onSubmit={(event) => void handlePromoteAdmin(event)} className="flex flex-col gap-3 sm:flex-row sm:items-end">
+            <label htmlFor="admin-account-email" className="flex flex-1 flex-col gap-2 text-sm text-[var(--muted)]">
+              <span>{t('admin.emailLabel')}</span>
+              <input
+                id="admin-account-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={adminEmail}
+                onChange={(event) => setAdminEmail(event.target.value)}
+                className="min-h-12 rounded-lg border border-[var(--line)] bg-[var(--paper)] px-3 py-2 text-[var(--ink)]"
+              />
+            </label>
+            <button
+              type="submit"
+              aria-disabled={isPromotingAdmin}
+              aria-busy={isPromotingAdmin}
+              className="min-h-12 rounded-lg bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-[var(--paper)] hover:bg-[var(--accent-deep)] aria-disabled:cursor-wait aria-disabled:opacity-70"
+            >
+              {isPromotingAdmin ? t('admin.promoting') : t('admin.promoteAction')}
+            </button>
+          </form>
+          <p role="status" aria-live="polite" aria-atomic="true" className={adminSuccess || isPromotingAdmin ? 'mt-4 text-sm text-green-800' : 'sr-only'}>
+            {isPromotingAdmin ? t('admin.promoting') : adminSuccess ?? ''}
+          </p>
+          {adminError ? <p role="alert" className="mt-4 text-sm text-red-800">{adminError}</p> : null}
+        </section>
+      ) : null}
 
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.4fr]">
         <aside className="border border-[var(--line)] bg-[var(--paper)] p-6">

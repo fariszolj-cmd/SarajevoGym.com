@@ -64,6 +64,8 @@
     "priceLimit": "Max monthly price",
     "sortBy": "Sort by",
     "distance": "Distance",
+    "distanceUnavailable": "Distance (share location to enable)",
+    "locationUnavailable": "Location wasn’t shared, so all gyms are shown without distance sorting or distances.",
     "price": "Price",
     "recommended": "Recommended",
     "openNow": "Open now",
@@ -107,7 +109,15 @@
   "admin": {
     "title": "Admin workspace",
     "description": "Manage gyms, prices, amenities and verified data for Sarajevo.",
-    "localWarning": "This is a local demo. Changes are saved only in this browser."
+    "localWarning": "This is a local demo. Changes are saved only in this browser.",
+    "databaseWarning": "Changes are saved to the configured Supabase project.",
+    "accessTitle": "Administrator access",
+    "accessDescription": "Promote an existing registered account by email. The person must sign in once with Google first, then sign out and back in after promotion.",
+    "emailLabel": "Account email",
+    "promoteAction": "Make administrator",
+    "promoting": "Updating administrator access…",
+    "promoteSuccess": "Administrator access was granted.",
+    "promoteError": "Could not update administrator access."
   },
   "privacy": {
     "eyebrow": "SarajevoGym · Privacy",
