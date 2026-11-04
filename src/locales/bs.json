@@ -120,7 +120,7 @@
     "servicesTitle": "Vanjske usluge",
     "servicesText": "Mapa učitava pločice s OpenStreetMap servera. Zahtjevi mogu otkriti IP adresu pružaocu mape.",
     "accountsTitle": "Nalozi i kontakt",
-    "accountsText": "Prijava putem Google računa nije aktivna dok se ne podesi Supabase Auth. Do tada aplikacija nudi lokalne demo uloge koje ne kreiraju pravi nalog. Podaci o teretanama i favoritima ostaju u ovom pregledniku.",
+    "accountsText": "Prijava putem Google računa koristi Supabase Auth i čuva profil naloga u podešenom Supabase projektu. Podaci o teretanama i favoritima koriste taj projekat kada je konfiguracija baze omogućena; u suprotnom se koriste lokalne demo uloge.",
     "sensitiveText": "Za sada nemojte unositi osjetljive lične podatke u prototip.",
     "back": "Nazad na pretragu teretana"
   },

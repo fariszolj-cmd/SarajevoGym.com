@@ -20,18 +20,18 @@ npm run lint
 
 ## Database status
 
-The Supabase project and Google sign-in are configured by the owner, who reports successful login and admin access. Gym listings and favorites still use browser `localStorage` and are not yet shared with Supabase. The schema and RLS migration are in `supabase/migrations/`; setup and integration status are in [docs/DATABASE.md](./docs/DATABASE.md).
+The Supabase project and Google sign-in are configured by the owner, who reports successful login and admin access. With both Supabase environment values present, gym listings and favorites use Supabase; without them, they use browser `localStorage`. The schema and RLS migrations are in `supabase/migrations/`; setup and integration status are in [docs/DATABASE.md](./docs/DATABASE.md).
 
-Google account sign-in uses Supabase Auth. Setting `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` enables authentication, but does not migrate browser data or make gym and favorite operations use the database yet.
+Google account sign-in uses Supabase Auth. When both `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set, gym and favorite operations use Supabase repositories; otherwise, localStorage adapters support offline/local demo development.
 
-The UI reads gyms and favorites through asynchronous repository interfaces in `src/features/gyms/`. The selected localStorage adapters are wired in one place, `src/features/gyms/repositories.ts`. A future database adapter can implement those same contracts and be selected there; pages and query hooks do not access browser storage directly.
+The UI reads gyms and favorites through asynchronous repository interfaces in `src/features/gyms/`. `src/features/gyms/repositories.ts` selects the Supabase adapters when configured and otherwise uses localStorage adapters. Pages and query hooks do not access browser storage directly.
 
 Never put a Supabase service-role key in the browser or a `VITE_` environment variable.
 
 ## Project structure
 
 - `src/pages/` — public, gym detail, saved, and admin pages
-- `src/features/gyms/` — gym model, repository contracts, browser-storage adapter, and query hooks
+- `src/features/gyms/` — gym model, localStorage/Supabase repository adapters, and query hooks
 - `src/features/auth/` — Google OAuth integration, local demo identity, profile roles, and route guard
 - `src/features/map/` — Leaflet map components
 - `src/lib/` — app configuration and lazily initialized Supabase client

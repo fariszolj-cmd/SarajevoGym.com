@@ -2,24 +2,25 @@
 
 ## Current storage status
 
-The owner has configured a Supabase project and reports that Google sign-in and the admin role work. Gym edits and favorites are still stored in browser `localStorage`; they are not yet shared across browsers or devices. The Supabase Auth client is configured locally, while the repository layer still needs its Supabase-backed implementation.
+The owner has configured a Supabase project and reports that Google sign-in and the admin role work. When Supabase environment values are configured, gym edits and favorites use the hosted project; without them, the app uses browser `localStorage`.
 
 The SQL schema in `supabase/migrations/20261104000000_initial_schema.sql` prepares a Supabase Postgres database with PostGIS, gym listings and prices, amenity catalog data, photos, user profiles, and per-user favorites. Row-level security is enabled for all app tables.
 
+The app's gym and favorite repositories use Supabase when both environment values are configured; otherwise they use localStorage. Apply the initial schema migration first, then apply `supabase/migrations/20261104010000_atomic_gym_upsert.sql` to enable atomic admin gym saves. This later migration uses an authenticated, security-invoker function, so database RLS policies still decide whether the caller may modify gym, price, photo, and amenity rows.
+
 ## Connect a Supabase project
 
-1. Create a Supabase project using its free plan. A database project has not been created on your behalf.
-2. In the Supabase Dashboard, open **SQL Editor**, paste the contents of the migration file, and run it.
-3. In **Project Settings > API**, copy the project URL and the anon/public key.
-4. `.env.local` contains the project URL for the configured Supabase project. Add its anon/public key as `VITE_SUPABASE_ANON_KEY`. Use the project URL root (`https://<project-ref>.supabase.co`), not the REST endpoint path ending in `/rest/v1`.
+1. In the Supabase Dashboard, open **SQL Editor** and run `20261104000000_initial_schema.sql`.
+2. Then run `20261104010000_atomic_gym_upsert.sql`. The admin form needs this migration to save a gym and its related records atomically.
+3. Confirm the schema and `save_gym` function are present. New Google accounts receive the `user` role from the profile trigger; grant admin only to a trusted account.
+4. The project URL and publishable/anon key belong in the ignored `.env.local` file as `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. Use the project root URL (`https://<project-ref>.supabase.co`), not the REST endpoint path ending in `/rest/v1`.
 5. Restart the Vite development server after changing environment variables.
-6. Confirm the schema is present in **Table Editor**. New Google accounts are created with the `user` role by the profile trigger.
 
 The anon/public key is expected in a browser app. Never put a Supabase service-role key in a `VITE_` variable or ship it to the browser. RLS is the security boundary for browser requests.
 
 ## Enable Google sign-in
 
-Google sign-in uses Supabase Auth. It is not active until a Supabase project and Google OAuth credentials are configured. The gym and favorite repositories remain localStorage-backed; enabling Auth does not migrate or upload their data.
+Google sign-in uses Supabase Auth. The owner reports that Google login is configured and working for this project. Configuring Auth does not migrate any data previously saved in browser localStorage.
 
 1. In Google Cloud Console, create an OAuth client ID for a **Web application**.
 2. Add your app origins as **Authorized JavaScript origins**, for example `http://localhost:5173` and your production origin.
@@ -29,7 +30,7 @@ Google sign-in uses Supabase Auth. It is not active until a Supabase project and
 6. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env.local`, restart Vite, and select **Continue with Google** on the sign-in page.
 7. The app reads the authenticated user's `profiles` row to apply its role. Grant admin access only by promoting a trusted profile with the SQL below; Google account details never grant admin access by themselves.
 
-The Google button is replaced by local demo roles when Supabase is not configured. Once configured, only Supabase-authenticated profile roles are used. A Supabase project is required for this authentication path; no project has been created or connected for this app.
+The Google button is replaced by local demo roles when Supabase is not configured. Once configured, only Supabase-authenticated profile roles are used. Gym data uses Supabase only when the project URL and publishable/anon key are both configured.
 
 ## Admin account
 
@@ -49,8 +50,8 @@ Replace the example address with the admin account's email. Do not expose a role
 
 ## Current integration boundary
 
-The migration and environment-aware Supabase client are ready. Google OAuth sign-in and profile-backed role loading are implemented and the owner reports that authentication works. The UI depends on asynchronous `GymRepository` and `FavoriteRepository` contracts, selected through the feature repository modules and used by TanStack Query hooks. The current implementations are still localStorage adapters. Until Supabase-backed repositories replace them, gym CRUD in the UI does not exercise database RLS.
+The migration and environment-aware Supabase client are ready. Google OAuth sign-in and profile-backed role loading are implemented and the owner reports that authentication works. The UI depends on asynchronous `GymRepository` and `FavoriteRepository` contracts selected through the feature repository module and used by TanStack Query hooks. Supabase repositories are now implemented and selected when the project URL and publishable/anon key are configured.
 
-Applying the migration alone will not move browser data into Postgres. The next integration work is to implement the repository contracts against Supabase, then test RLS with anonymous, normal-user, and admin sessions. Any test gym should be clearly labeled and removed after testing; do not seed unverified listings.
+Applying the migrations does not upload browser-local data or seed gym listings. Both migrations must be applied before using the admin form. Then restart Vite and test RLS with anonymous, normal-user, and admin sessions. Any permission-test gym should be clearly labeled and removed after testing; do not seed unverified listings.
 
 To keep initial setup reversible, seed listings are not inserted into the hosted database automatically. Import only verified gym details once the live data source and verification process are ready.

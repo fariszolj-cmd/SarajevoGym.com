@@ -9,7 +9,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
   const mainRef = useRef<HTMLElement>(null);
-  const { authError, user, isAuthenticated, signOut } = useAuth();
+  const { authError, user, isAuthenticated, isAdmin, signOut } = useAuth();
   const { data: favoriteSlugs } = useFavoriteSlugsQuery();
   const savedCount = favoriteSlugs?.length;
 
@@ -35,7 +35,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <NavLink to="/saved" className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>
               {t('nav.saved')} {savedCount !== undefined && savedCount > 0 ? `(${savedCount})` : ''}
             </NavLink>
-            <NavLink to="/admin" className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>{t('nav.admin')}</NavLink>
+            {isAdmin ? (
+              <NavLink to="/admin" className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>{t('nav.admin')}</NavLink>
+            ) : null}
 
             {isAuthenticated ? (
               <>

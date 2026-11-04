@@ -120,7 +120,7 @@
     "servicesTitle": "External services",
     "servicesText": "The map loads tiles from OpenStreetMap servers. Those requests may reveal your IP address to the map provider.",
     "accountsTitle": "Accounts and contact",
-    "accountsText": "Google account sign-in is inactive until Supabase Auth is configured. Until then, the app offers local demo roles that do not create real accounts. Gym and favorite data remains in this browser.",
+    "accountsText": "Google sign-in uses Supabase Auth and stores your account profile in the configured Supabase project. Gym listings and favorites use that project when database configuration is enabled; local demo roles are used otherwise.",
     "sensitiveText": "For now, do not enter sensitive personal information in the prototype.",
     "back": "Back to gym search"
   },
