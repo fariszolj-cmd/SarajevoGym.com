@@ -1,7 +1,8 @@
 {
   "app": {
     "title": "SarajevoGym",
-    "tagline": "Pronađite pravi gym u Sarajevu"
+    "tagline": "Pronađite pravi gym u Sarajevu",
+    "loadingPage": "Učitavanje stranice…"
   },
   "nav": {
     "home": "Pretraži centre",

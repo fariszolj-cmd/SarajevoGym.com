@@ -4,6 +4,8 @@
 
 The owner has configured a Supabase project and reports that Google sign-in and the admin role work. When Supabase environment values are configured, gym edits and favorites use the hosted project; without them, the app uses browser `localStorage`.
 
+The owner confirmed that all three migrations listed below have been applied to the hosted project. Admin gym-save and user-promotion flows still need verification there with the real admin account.
+
 The SQL schema in `supabase/migrations/20261104000000_initial_schema.sql` prepares a Supabase Postgres database with PostGIS, gym listings and prices, amenity catalog data, photos, user profiles, and per-user favorites. Row-level security is enabled for all app tables.
 
 The app's gym and favorite repositories use Supabase when both environment values are configured; otherwise they use localStorage. Apply the initial schema migration first, then apply `supabase/migrations/20261104010000_atomic_gym_upsert.sql` to enable atomic admin gym saves. This later migration uses an authenticated, security-invoker function, so database RLS policies still decide whether the caller may modify gym, price, photo, and amenity rows.

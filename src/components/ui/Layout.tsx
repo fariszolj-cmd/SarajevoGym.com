@@ -72,7 +72,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main ref={mainRef} id="main-content" tabIndex={-1} className="min-h-[65vh] outline-none">
+      <main ref={mainRef} id="main-content" tabIndex={-1} className="min-h-[65vh]">
         {authError ? (
           <div role="alert" className="mx-auto mt-5 max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-900">{authError}</p>

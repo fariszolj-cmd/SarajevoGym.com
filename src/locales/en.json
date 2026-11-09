@@ -1,7 +1,8 @@
 {
   "app": {
     "title": "SarajevoGym",
-    "tagline": "Find the right gym in Sarajevo"
+    "tagline": "Find the right gym in Sarajevo",
+    "loadingPage": "Loading page…"
   },
   "nav": {
     "home": "Browse gyms",

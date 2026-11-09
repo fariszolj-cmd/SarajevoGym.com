@@ -300,6 +300,11 @@ textarea {
   transform: translateY(0);
 }
 
+#main-content:focus {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
 .app-header {
   box-shadow: 0 8px 26px rgba(20, 24, 21, 0.12);
   backdrop-filter: blur(16px);
